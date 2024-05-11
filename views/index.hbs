@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Form</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="stylesheet" href="/style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+        }
+        .container{
+            position: relative;
+            top: 30px;
+        }
+        .table-container {
+            background-color: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            width: 30%;
+            display: inline-block;
+            vertical-align: top;
+            height: 300px; /* Fixed height */
+            overflow-y: auto; /* Add scrollbar */
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th,
+        td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        @media (max-width: 480px) {
+            .table-container {
+                width: 100%;
+                margin-right: 0;
+                margin-left: 0;
+            }
+            .container{
+            position: relative;
+            top: 30px;
+        }
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav class="navbar navbar-expand-lg navbar-light bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand text-white" href="/">AIML</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link active text-white" aria-current="page" href="/"><i
+                                class="fa fa-dashboard"></i> Dashboard</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle active text-white" href="#" id="navbarDropdown"
+                            role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fas fa-school"></i> School
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <li><a class="dropdown-item" href="/school">Add School</a></li>
+                            <li><a class="dropdown-item" href="/viewsc">Edit / View School</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle active text-white" href="#" id="navbarDropdown"
+                            role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fas fa-user-plus"></i> Student
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <li><a class="dropdown-item" href="/register">Add Student</a></li>
+                            <li><a class="dropdown-item" href="/viewst">Edit / View Student</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle active text-white" href="#" id="navbarDropdown"
+                            role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fas fa-home"></i> Exam Center
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <li><a class="dropdown-item" href="/center">Add Center</a></li>
+                            <li><a class="dropdown-item" href="/viewct">Edit / View Center</a></li>
+                        </ul>
+                    </li>
+                    
+
+                </ul>
+            </div>
+        </div>
+    </nav>
+    
+    
+  
+
+    <div class="container mt-5">
+        <div class="table-container bg-success text-white">
+            <h4>Total Counts</h4>
+            <table>
+                <tr>
+                    <th>Total Schools</th>
+                    <td id="totalSchools">Loading...</td>
+                </tr>
+                <tr>
+                    <th>Total Students</th>
+                    <td id="totalStudents">Loading...</td>
+                </tr>
+                <tr>
+                    <th>Total Centers</th>
+                    <td id="totalCenters">Loading...</td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="table-container bg-danger text-white">
+            <h4>Classes</h4>
+            <table id="classTable">
+                <!-- Class data will be inserted here -->
+            </table>
+        </div>
+
+        <div class="table-container bg-primary text-white">
+            <h4>Medium Wise Students</h4>
+            <table id="mediumTable">
+                <!-- Medium data will be inserted here -->
+            </table>
+        </div>
+        <div class="table-container bg-warning text-white">
+            <h4>Medium-wise School Count</h4>
+            <table id="schoolMediumTable">
+                <!-- Medium-wise school count data will be inserted here -->
+            </table>
+        </div>
+        <!--<div class="table-container bg-info text-white">
+            <h4>Medium-wise Class Count</h4>
+            <table id="classMediumTable">
+                
+            </table>
+        </div>
+        <div class="table-container bg-secondary text-white">
+            <h4>Recently Added Students</h4>
+            <table id="recentStudentsTable">
+                <tr>
+                    <th>Name</th>
+                    <th>Class</th>
+                    <th>Guardian Name</th>
+                    <th>Contact Number</th>
+                    <th>School Name Code</th>
+                    <th>Student ID</th>
+                </tr>
+                
+            </table>
+        </div>
+        <div class="table-container bg-secondary text-white">
+            <h4>Recently Added Schools</h4>
+            <table id="recentSchoolsTable">
+                <thead>
+                    <tr>
+                        <th>School Code</th>
+                        <th>Name</th>
+                        <th>City</th>
+                        <th>Medium</th>
+                        <th>Contact</th>
+                    </tr>
+                </thead>
+                <tbody id="recentSchoolsBody">
+                    
+                </tbody>
+            </table>
+        </div>
+        <div class="table-container bg-dark text-white">
+            <h4>Recently Added Centers</h4>
+            <table id="recentCentersTable">
+                <thead>
+                    <tr>
+                        <th>Center ID</th>
+                        <th>School Code</th>
+                        <th>City</th>
+                        <th>Center Name</th>
+                    </tr>
+                </thead>
+                <tbody id="recentCentersBody">
+                   
+                </tbody>
+            </table>
+        </div>-->
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"></script>
+
+    <script>
+        // Add sticky class to navbar on scroll
+        window.addEventListener('scroll', function () {
+            const navbar = document.querySelector('.navbar');
+            navbar.classList.toggle('sticky', window.scrollY > 0);
+        });
+
+        // Fetch counts of total schools, students, classes, and mediums
+        fetch('/backend/totalSchools')
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('totalSchools').innerText = data.totalSchools;
+            })
+            .catch(error => {
+                console.error('Error fetching total schools:', error);
+            });
+
+        fetch('/backend/totalStudents')
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('totalStudents').innerText = data.totalStudents;
+            })
+            .catch(error => {
+                console.error('Error fetching total students:', error);
+            });
+
+        // Fetch data for classes
+        fetch('/backend/studentsByClass')
+            .then(response => response.json())
+            .then(data => {
+                const classTable = document.getElementById('classTable');
+                Object.keys(data).forEach(className => {
+                    const count = data[className];
+                    const row = `
+                        <tr>
+                            <td>${className}</td>
+                            <td>${count}</td>
+                        </tr>
+                    `;
+                    classTable.innerHTML += row;
+                });
+            })
+            .catch(error => {
+                console.error('Error fetching students by class:', error);
+            });
+
+        // Fetch data for mediums
+        fetch('/backend/studentsByMedium')
+            .then(response => response.json())
+            .then(data => {
+                const mediumTable = document.getElementById('mediumTable');
+                Object.keys(data).forEach(medium => {
+                    const count = data[medium];
+                    const row = `
+                        <tr>
+                            <td>${medium}</td>
+                            <td>${count}</td>
+                        </tr>
+                    `;
+                    mediumTable.innerHTML += row;
+                });
+            })
+            .catch(error => {
+                console.error('Error fetching students by medium:', error);
+            });
+        fetch('/backend/schoolsByMedium')
+            .then(response => response.json())
+            .then(data => {
+                const schoolMediumTable = document.getElementById('schoolMediumTable');
+                Object.keys(data).forEach(medium => {
+                    const count = data[medium];
+                    const row = `
+                        <tr>
+                            <td>${medium}</td>
+                            <td>${count}</td>
+                        </tr>
+                    `;
+                    schoolMediumTable.innerHTML += row;
+                });
+            })
+            .catch(error => {
+                console.error('Error fetching schools by medium:', error);
+            });
+        fetch('/backend/classesByMedium')
+            .then(response => response.json())
+            .then(data => {
+                const classMediumTable = document.getElementById('classMediumTable');
+                Object.keys(data).forEach(medium => {
+                    const count = data[medium];
+                    const row = `
+                        <tr>
+                            <td>${medium}</td>
+                            <td>${count}</td>
+                        </tr>
+                    `;
+                    classMediumTable.innerHTML += row;
+                });
+            })
+            .catch(error => {
+                console.error('Error fetching classes by medium:', error);
+            });
+
+        fetch('/backend/totalCenters')
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('totalCenters').innerText = data.totalCenters;
+            })
+            .catch(error => {
+                console.error('Error fetching total centers:', error);
+            });
+
+        // Fetch data for recently added students
+        fetch('/backend/recentStudents')
+            .then(response => response.json())
+            .then(data => {
+                const recentStudentsTable = document.getElementById('recentStudentsTable');
+                data.forEach(student => {
+                    const row = `
+                <tr>
+                    <td>${student.name}</td>
+                    <td>${student.Class}</td>
+                    <td>${student.gurdianname}</td>
+                    <td>${student.contactno}</td>
+                    <td>${student.schoolNameCode}</td>
+                    <td>${student.studentID}</td>
+                </tr>
+            `;
+                    recentStudentsTable.innerHTML += row;
+                });
+            })
+            .catch(error => {
+                console.error('Error fetching recent students:', error);
+            });
+
+        fetch('/backend/recentSchools')
+            .then(response => response.json())
+            .then(data => {
+                const recentSchoolsBody = document.getElementById('recentSchoolsBody');
+                data.forEach(school => {
+                    const row = `
+                        <tr>
+                            <td>${school.school_code}</td>
+                            <td>${school.name}</td>
+                            <td>${school.city}</td>
+                            <td>${school.medium}</td>
+                            <td>${school.contact}</td>
+                        </tr>
+                    `;
+                    recentSchoolsBody.innerHTML += row;
+                });
+            })
+            .catch(error => {
+                console.error('Error fetching recent schools:', error);
+            });
+
+        fetch('/backend/recentCenters')
+            .then(response => response.json())
+            .then(data => {
+                const recentCentersBody = document.getElementById('recentCentersBody');
+                data.forEach(center => {
+                    const row = `
+                        <tr>
+                            <td>${center.center_id}</td>
+                            <td>${center.school_code}</td>
+                            <td>${center.city}</td>
+                            <td>${center.center_name}</td>
+                        </tr>
+                    `;
+                    recentCentersBody.innerHTML += row;
+                });
+            })
+            .catch(error => {
+                console.error('Error fetching recent centers:', error);
+            });
+
+    </script>
+
+</body>
+
+</html>

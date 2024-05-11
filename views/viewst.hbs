@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Student</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <link rel="stylesheet" href="/style.css">
+
+    <style>
+        /*.navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+        }*/
+
+
+        .table-container {
+            max-height: 400px;
+            /* Set max height for scroll */
+            overflow-y: auto;
+            /* Enable vertical scrollbar */
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand text-white" href="/">AIML</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link active text-white" aria-current="page" href="/"><i
+                                class="fa fa-dashboard"></i>
+                            Dashboard</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle active text-white" href="#" id="navbarDropdown" role="button"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fas fa-school"></i> School
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <li><a class="dropdown-item" href="/school">Add School</a></li>
+                            <li><a class="dropdown-item" href="/viewsc">Edit / View School</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle active text-white" href="#" id="navbarDropdown" role="button"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fas fa-user-plus"></i> Student
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <li><a class="dropdown-item" href="/register">Add Student</a></li>
+                            <li><a class="dropdown-item" href="/viewst">Edit / View Student</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle active text-white" href="#" id="navbarDropdownStudent"
+                            role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fas fa-user-plus"></i> Exam Center
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdownStudent">
+                            <li><a class="dropdown-item" href="/center">Add Center</a></li>
+                            <li><a class="dropdown-item" href="/viewct">Edit / View Center</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div id="successMessage" class="alert alert-success" style="display: none;" role="alert">
+        Student information updated successfully!
+    </div>
+
+    <div class="container mt-5">
+        <h1>All Students</h1>
+        <div class="d-flex justify-content-between">
+            <!-- This div will contain both forms and align them side by side -->
+            <form action="/auth/searchBySchoolName" method="POST" class="mr-2">
+                <!-- Add margin to separate the forms -->
+                <div class="input-group mb-3">
+                    <input id="schoolNameInput" type="text" name="schoolName" class="form-control pr-3"
+                        placeholder="School">
+                    <!--<button id="searchButton" class="btn btn-primary w-50" type="submit">Search</button>-->
+                </div>
+            </form>
+
+            <form action="/auth/searchByMedium" method="POST">
+                <div class="input-group mb-3">
+                    <input id="mediumNameInput" type="text" name="medium" class="form-control pr-3"
+                        placeholder="Medium">
+                </div>
+            </form>
+            <form action="/auth/searchByClass" method="POST">
+                <div class="input-group mb-3">
+                    <input id="classNameInput" type="text" name="Class" class="form-control pr-3" placeholder="Class">
+                </div>
+            </form>
+        </div>
+
+
+        <div class="table-container">
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Student ID</th>
+                            <th>Class <i class="fas fa-sort"></i></th>
+                            <!--<th>Medium</th>-->
+                            <th>Guardian Name</th>
+                            <th>Mobile No</th>
+                            <th>School Name <i class="fas fa-sort"></i></th>
+                            <th>Actions</th> <!-- New column for update action -->
+                        </tr>
+                    </thead>
+                    <tbody id="studentTableBody">
+                        <!-- Student data will be dynamically added here -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Update Modal -->
+    <div class="modal fade" id="updateModal" tabindex="-1" aria-labelledby="updateModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="updateModalLabel">Update Student Information</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="updateForm" action="/auth/student/update" method="POST">
+                        <input type="hidden" class="form-control" name="studentID">
+                        <div class="mb-3">
+                            <label for="name" class="form-label">Name</label>
+                            <input type="text" class="form-control" name="name" required>
+                        </div>
+                       
+                        <div class="mb-3">
+                            <label for="Class" class="form-label">Class</label>
+                            <select class="form-select" id="Class" name="Class" required>
+                                <option value="">Select Class</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                                <option value="6">6</option>
+                                <option value="7">7</option>
+                                <option value="8">8</option>
+                                <option value="9">9</option>
+                                <option value="10">10</option>
+                                <option value="11">11</option>
+                                <option value="12">12</option>
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="gurdianname" class="form-label">Guardian Name</label>
+                            <input type="text" class="form-control" name="gurdianname" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="contactno" class="form-label">Mobile No</label>
+                            <input type="text" class="form-control" name="contactno"
+                                oninput="validateMobileNumber(this)" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="schoolNameCode" class="form-label">School Name</label>
+                            <input type="text" class="form-control" name="schoolNameCode" required>
+                        </div>
+
+
+                        <button type="submit" class="btn btn-success">Save Changes</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <!-- Success Message -->
+
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            let ascendingOrder = true; // Default sorting order
+
+            // Function to sort table data by column
+            function sortTableData(columnIndex) {
+                const rows = $('#studentTableBody').find('tr').get();
+                rows.sort(function (a, b) {
+                    const aValue = $(a).find('td').eq(columnIndex).text();
+                    const bValue = $(b).find('td').eq(columnIndex).text();
+                    if (ascendingOrder) {
+                        return aValue.localeCompare(bValue);
+                    } else {
+                        return bValue.localeCompare(aValue);
+                    }
+                });
+                $('#studentTableBody').empty().append(rows);
+            }
+
+            // Click event for sorting by Class
+            $('th:nth-child(3)').click(function () {
+                sortTableData(2);
+                ascendingOrder = !ascendingOrder;
+                $(this).find('i').toggleClass('fa-sort-up fa-sort-down');
+            });
+
+            // Click event for sorting by School Name
+            $('th:nth-child(6)').click(function () {
+                sortTableData(5);
+                ascendingOrder = !ascendingOrder;
+                $(this).find('i').toggleClass('fa-sort-up fa-sort-down');
+            });
+
+            // Fetch and display students data
+            fetchStudentsData();
+
+            // Fetch school names and initialize autocomplete
+           fetch('/auth/schoolNames')
+                .then(response => response.json())
+                .then(data => {
+                    const schoolNames = data;
+                    $('#schoolNameInput').autocomplete({
+                        source: schoolNames
+                    });
+                })
+                .catch(error => {
+                    console.error('Error fetching school names:', error);
+                });
+                
+                
+
+
+
+            // Update student modal event handler
+            /*$('#updateModal').on('show.bs.modal', function (event) {
+                const button = $(event.relatedTarget); // Button that triggered the modal
+                const studentData = button.data('student'); // Extract info from data-* attributes
+                const modal = $(this);
+                modal.find('.modal-title').text('Update Student Information');
+                modal.find('input[name="studentID"]').val(studentData.studentID);
+                modal.find('input[name="name"]').val(studentData.name);
+                modal.find('input[name="Class"]').val(studentData.Class);
+                // modal.find('input[name="mediumCode"]').val(studentData.mediumCode);
+                modal.find('input[name="gurdianname"]').val(studentData.gurdianname);
+                modal.find('input[name="contactno"]').val(studentData.contactno);
+                modal.find('input[name="schoolNameCode"]').val(studentData.schoolNameCode);
+            });*/
+             $('#updateModal').on('show.bs.modal', function (event) {
+        const button = $(event.relatedTarget); // Button that triggered the modal
+        const studentData = button.data('student'); // Extract info from data-* attributes
+        const modal = $(this);
+        modal.find('.modal-title').text('Update Student Information');
+        modal.find('input[name="studentID"]').val(studentData.studentID);
+        modal.find('input[name="name"]').val(studentData.name);
+        modal.find('select[name="Class"]').val(studentData.Class); // Use select instead of input
+        modal.find('input[name="gurdianname"]').val(studentData.gurdianname);
+        modal.find('input[name="contactno"]').val(studentData.contactno);
+        
+        // Decode schoolNameCode before setting the value
+        const decodedSchoolName = decodeURIComponent(studentData.schoolNameCode);
+        modal.find('input[name="schoolNameCode"]').val(decodedSchoolName);
+    });
+           
+
+            // Update form submission
+            $('#updateForm').submit(function (event) {
+                event.preventDefault(); // Prevent default form submission
+                const form = $(this);
+                const formData = form.serialize(); // Serialize form data
+                $.ajax({
+                    type: 'POST',
+                    url: form.attr('action'),
+                    data: formData,
+                    success: function (response) {
+                        $('#updateModal').modal('hide'); // Hide the modal after successful update
+                        $('#successMessage').show(); // Show the success message
+                        fetchStudentsData(); // Refresh student data after update
+
+                        // Hide the success message after 5 seconds
+                        setTimeout(function () {
+                            $('#successMessage').fadeOut('slow');
+                        }, 3000);
+                    },
+                    error: function (xhr, status, error) {
+                        console.error('Error updating student information:', error);
+                    }
+                });
+            });
+
+            // Function to fetch and display students data
+            function fetchStudentsData() {
+                fetch('/auth/studentsData')
+                    .then(response => response.json())
+                    .then(data => {
+                        const students = data.students;
+                        const tbody = $('#studentTableBody');
+                        tbody.empty(); // Clear existing table data
+                        students.forEach(student => {
+                            const row = `
+                            <tr>
+                                <td>${student.name}</td>
+                                <td>${student.studentID}</td>
+                                <td>${student.Class}</td>
+                             
+                                <td>${student.gurdianname}</td>
+                                <td>${student.contactno}</td>
+                                <td>${student.schoolNameCode}</td>
+                                <td>
+                                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#updateModal" data-student='${JSON.stringify(student)}'>Edit</button>
+                                   
+
+                                </td>
+                            </tr >
+                `;
+                            tbody.append(row);
+                        });
+                    })
+                    .catch(error => {
+                        console.error('Error fetching student data:', error);
+                    });
+            }
+            
+            
+        });
+        function validateMobileNumber(input) {
+            input.value = input.value.replace(/\D/g, ''); // Remove any non-numeric characters
+            if (input.value.length > 10) {
+                input.value = input.value.slice(0, 10); // Limit to 10 digits
+            }
+        }
+        
+    </script>
+   
+
+</body>
+
+</html>

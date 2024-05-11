@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Student</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="stylesheet" href="/style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+        }
+
+        .container {
+            position: relative;
+            top: 30px;
+        }
+
+        /* Custom styles for dropdown */
+        .dropdown-menu {
+            background-color: #fff;
+        }
+
+        .dropdown-menu.show {
+            display: block;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .confirmation {
+            display: none;
+        }
+
+        @media (max-width: 480px) {
+
+            .container {
+                position: relative;
+                top: 30px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand text-white" href="/">AIML</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link active text-white" aria-current="page" href="/"><i
+                                class="fa fa-dashboard"></i>
+                            Dashboard</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle active text-white" href="#" id="navbarDropdown" role="button"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fas fa-school"></i> School
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <li><a class="dropdown-item" href="/school">Add School</a></li>
+                            <li><a class="dropdown-item" href="/viewsc">View School</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle active text-white" href="#" id="navbarDropdown" role="button"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fas fa-user-plus"></i> Student
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <li><a class="dropdown-item" href="/register">Add Student</a></li>
+                            <li><a class="dropdown-item" href="/viewst">Edit / View Student</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle active text-white" href="#" id="navbarDropdown" role="button"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fas fa-user-plus"></i>Exam Center
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <li><a class="dropdown-item" href="/center">Add Center</a></li>
+                            <li><a class="dropdown-item" href="/viewct">Edit / View Center</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-5">
+        <!-- Hidden message div -->
+        <!--<div id="successMessage" class="alert alert-success" style="display: none;">
+            Student added successfully!
+        </div>-->
+        <div class="confirmation">
+            <p>Student added successfully!</p>
+        </div>
+
+        <form action="/auth/register" method="post" onsubmit="return validateForm()">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="mb-3 w-100">
+                        <label for="schoolNameCode" class="form-label">School Name & Code</label>
+                        <select class="form-select" id="schoolNameCode" name="schoolNameCode">
+                            <option value="">Select school name & code</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="mb-3 w-50">
+                <label for="name" class="form-label">Name</label>
+                <input type="text" class="form-control" id="name" name="name" placeholder="Enter Name" required>
+            </div>
+            <div class="mb-3 w-50">
+                <label for="Class" class="form-label">Class</label>
+                <select class="form-select" id="Class" name="Class" required>
+                    <option value="">Select Class</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option>
+                    <option value="7">7</option>
+                    <option value="8">8</option>
+                    <option value="9">9</option>
+                    <option value="10">10</option>
+                    <option value="11">11</option>
+                    <option value="12">12</option>
+                </select>
+            </div>
+            <div class="mb-3 w-50">
+                <label for="mediumCode" class="form-label">Medium</label>
+                <select class="form-select" id="mediumCode" name="mediumCode" required>
+                    <option value="">Select Medium</option>
+                    <option value="Bengali">Bengali</option>
+                    <option value="Hindi">Hindi</option>
+                    <option value="English">English</option>
+                    <option value="Nepali">Nepali</option>
+                    <option value="Urdu">Urdu</option>
+                    <option value="Madrash">Madrash</option>
+                </select>
+            </div>
+            <div class="mb-3 w-50">
+                <label for="gurdianname" class="form-label">Guardian Name</label>
+                <input type="text" class="form-control" id="gurdianname" name="gurdianname"
+                    placeholder="Enter Guardian Name" required>
+            </div>
+            <div class="mb-3 w-50">
+                <label for="contactno" class="form-label">Mobile No:</label>
+                <input type="text" class="form-control" id="contactno" name="contactno" placeholder="Enter Contact No:"
+                    oninput="validateMobileNumber(this)" required>
+            </div>
+            <div class="mb-3 w-50">
+                <label for="date" class="form-label">Date</label>
+                <input type="date" class="form-control" id="date" name="date" onchange="updateDate()" readonly>
+            </div>
+            <div class="text-center">
+                <button type="submit" id="submit-button" class="btn btn-primary w-50">Register Information</button>
+            </div>
+        </form>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const schoolNameCodeSelect = document.getElementById("schoolNameCode");
+
+            fetch('/schools')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    data.forEach(suggestion => {
+                        const option = document.createElement("option");
+                        const value = `${suggestion.name} (${suggestion.school_code})`; // Concatenate name and code
+                        option.textContent = value; // Displaying both name and code
+                        option.value = value; // Set option value to concatenated string
+                        schoolNameCodeSelect.appendChild(option);
+                    });
+                })
+                .catch(error => {
+                    console.error("Error fetching schools:", error);
+                });
+
+        });
+
+        function validateForm() {
+            var name = document.getElementById("name").value.trim();
+            var Class = document.getElementById("Class").value.trim();
+            var gurdianname = document.getElementById("gurdianname").value.trim();
+            var contactno = document.getElementById("contactno").value.trim();
+            var mediumCode = document.getElementById("mediumCode").value.trim();
+
+            if (name === '' || Class === '' || gurdianname === '' || contactno === '' || mediumCode === '') {
+                alert("All fields are required!");
+                return false;
+            }
+            return true;
+        }
+        function validateMobileNumber(input) {
+            input.value = input.value.replace(/\D/g, ''); // Remove any non-numeric characters
+            if (input.value.length > 10) {
+                input.value = input.value.slice(0, 10); // Limit to 10 digits
+            }
+        }
+
+        function updateDate() {
+            var today = new Date();
+            var dd = String(today.getDate()).padStart(2, '0');
+            var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+            var yyyy = today.getFullYear();
+
+            today = yyyy + '-' + mm + '-' + dd;
+            document.getElementById('date').value = today;
+        }
+
+        updateDate(); // Update date on page load
+
+
+        /* function showSuccessMessage() {
+             var successMessage = document.getElementById('successMessage');
+             successMessage.style.display = 'block';
+ 
+             setTimeout(function () {
+                 successMessage.style.display = 'none';
+             }, 5000); // Hide after 5 seconds
+         }*/
+        $('#submit-button').click(function () {
+            $(".confirmation").show();
+        });
+    </script>
+
+
+</body>
+
+</html>

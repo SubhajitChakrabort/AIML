@@ -1,0 +1,20 @@
+const express = require('express');
+const authCotroller = require('../controllers/auth');
+const router = express.Router();
+
+router.post("/register", authCotroller.register);
+router.post("/school", authCotroller.schoolregister);
+router.get("/viewst", authCotroller.viewStudents);
+router.get("/viewsc", authCotroller.viewSchools);
+router.post("/search", authCotroller.searchStudents);
+router.post("/searchBySchoolName", authCotroller.searchBySchoolName);
+router.get("/schoolNames", authCotroller.getAllSchoolNames);
+router.get('/studentsData', authCotroller.getStudents);
+router.get('/backend/totalSchools', authCotroller.getTotalSchools);
+router.get('/backend/totalStudents', authCotroller.getTotalStudents);
+router.get('/student/:studentID', authCotroller.getStudentById);
+router.post('/student/update', authCotroller.updateStudent);
+router.get('/StudentsBySchool', authCotroller.getStudentsBySchool);
+router.post('/searchByMedium', authCotroller.searchByMedium);
+router.post('/searchByClass', authCotroller.searchByClass);
+module.exports = router;

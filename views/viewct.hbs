@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Center</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="stylesheet" href="/style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+        
+        /*.navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+        }*/
+        
+    
+        .table-container {
+            max-height: 400px;
+            /* Set max height for scroll */
+            overflow-y: auto;
+            /* Enable vertical scrollbar */
+        }
+    </style>
+</head>
+
+<body>
+   <!-- <nav class="navbar navbar-expand-lg navbar-light bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand text-white" href="/">AIML</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link active text-white" aria-current="page" href="/"><i
+                                class="fa fa-dashboard"></i>
+                             Dashboard</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle active text-white" href="#" id="navbarDropdownSchool"
+                            role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fas fa-school"></i> School
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdownSchool">
+                            <li><a class="dropdown-item" href="/school">Add School</a></li>
+                            <li><a class="dropdown-item" href="/viewsc">Edit / View School</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle active text-white" href="#" id="navbarDropdownStudent"
+                            role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fas fa-user-plus"></i> Student
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdownStudent">
+                            <li><a class="dropdown-item" href="/register">Add Student</a></li>
+                            <li><a class="dropdown-item" href="/viewst">Edit / View Student</a></li>
+                        </ul>
+                    </li>
+                   <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle active text-white" href="#" id="navbarDropdownStudent"
+                            role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fas fa-user-plus"></i> Exam Center
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdownStudent">
+                            <li><a class="dropdown-item" href="/center">Add Center</a></li>
+                            <li><a class="dropdown-item" href="/viewct">Edit / View Center</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>-->
+     <button class="btn btn-success mt-3 mx-2" onclick={history.back()}> Go Back </button>
+     <a class="btn btn-success mt-3 mx-auto" href="/center">Add Center</a>
+     
+
+    <div class="container mt-5">
+        <h2>View Centers</h2>
+        <div class="table-container">
+            <form id="searchByCenterForm" class="mr-2">
+                <!-- Add margin to separate the forms -->
+                <div class="input-group mb-3 w-50">
+                    <input id="centerNameInput" type="text" name="centerName" class="form-control pr-3"
+                        placeholder="Search By Center" autocomplete="off">
+                    <div class="dropdown-menu" id="suggestions" aria-labelledby="centerNameInput"
+                        style="display: none;">
+                    </div>
+                    <!--<button id="searchButton" class="btn btn-primary" type="submit">Search</button>-->
+                </div>
+            </form>
+            <div class="table-responsive w-75">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Center Name</th>
+                           <!-- <th>City</th>-->
+                            <th>Invited Schools</th>
+                        </tr>
+                    </thead>
+                    <tbody id="centerTableBody">
+                        <!-- Table body will be inserted here -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+        /*document.addEventListener('DOMContentLoaded', () => {
+            const centerTableBody = document.getElementById('centerTableBody');
+            const searchByCenterForm = document.getElementById('searchByCenterForm');
+            const centerNameInput = document.getElementById('centerNameInput');
+            const suggestions = document.getElementById('suggestions');
+
+            // Function to handle form submission
+            searchByCenterForm.addEventListener('submit', (event) => {
+                event.preventDefault(); // Prevent default form submission behavior
+
+                const formData = new FormData(searchByCenterForm);
+                const centerName = formData.get('centerName');
+
+                // Fetch center data based on the entered center name
+                fetch('/auth/searchBycenterName', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ centerName })
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        centerTableBody.innerHTML = ''; // Clear previous search results
+                        data.forEach(center => {
+                            const row = `
+                            <tr>
+                                <td>${center.center_name}</td>
+                                <td>${center.city}</td>
+                                <td>${center.school_code}</td>
+                            </tr>
+                        `;
+                            centerTableBody.insertAdjacentHTML('beforeend', row);
+                        });
+                    })
+                    .catch(error => console.error('Error searching centers:', error));
+            });
+
+            // Function to fetch autocomplete suggestions
+            centerNameInput.addEventListener('input', () => {
+                const query = centerNameInput.value;
+
+                fetch(`/api/centers/suggestions?query=${query}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        // Filter out duplicate center names
+                        const uniqueSuggestions = Array.from(new Set(data));
+
+                        suggestions.innerHTML = '';
+                        if (uniqueSuggestions.length > 0) {
+                            uniqueSuggestions.forEach(suggestion => {
+                                const item = document.createElement('a');
+                                item.classList.add('dropdown-item');
+                                item.href = '#';
+                                item.textContent = suggestion;
+                                item.addEventListener('click', () => {
+                                    centerNameInput.value = suggestion;
+                                    suggestions.style.display = 'none';
+                                });
+                                suggestions.appendChild(item);
+                            });
+                            suggestions.style.display = 'block';
+                        } else {
+                            suggestions.style.display = 'none';
+                        }
+                    })
+                    .catch(error => console.error('Error fetching suggestions:', error));
+            });
+
+            // Fetch center data from the backend
+            fetch('/api/centers')
+                .then(response => response.json())
+                .then(data => {
+                    data.forEach(center => {
+                        const row = `
+                            <tr>
+                                <td>${center.center_name}</td>
+                                <td>${center.city}</td>
+                                <td>${center.school_code}</td>
+                            </tr>
+                        `;
+                        centerTableBody.insertAdjacentHTML('beforeend', row);
+                    });
+                })
+                .catch(error => console.error('Error fetching center data:', error));
+        });*/
+        document.addEventListener('DOMContentLoaded', () => {
+    const centerTableBody = document.getElementById('centerTableBody');
+    const searchByCenterForm = document.getElementById('searchByCenterForm');
+    const centerNameInput = document.getElementById('centerNameInput');
+    const suggestions = document.getElementById('suggestions');
+
+    // Function to handle form submission
+    searchByCenterForm.addEventListener('submit', (event) => {
+        event.preventDefault(); // Prevent default form submission behavior
+
+        const formData = new FormData(searchByCenterForm);
+        const centerName = formData.get('centerName');
+
+        // Fetch center data based on the entered center name
+        fetch('/auth/searchBycenterName', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ centerName })
+        })
+            .then(response => response.json())
+            .then(data => {
+                centerTableBody.innerHTML = ''; // Clear previous search results
+                data.forEach(center => {
+                    const row = `
+                        <tr>
+                            <td>${center.center_name}</td>
+                            <!--<td>${center.city}</td>-->
+                            <td>${center.school_code}</td>
+                        </tr>
+                    `;
+                    centerTableBody.insertAdjacentHTML('beforeend', row);
+                });
+            })
+            .catch(error => console.error('Error searching centers:', error));
+    });
+
+    // Function to fetch autocomplete suggestions
+    centerNameInput.addEventListener('input', () => {
+        const query = centerNameInput.value;
+
+        fetch(`/api/centers/suggestions?query=${query}`)
+            .then(response => response.json())
+            .then(data => {
+                // Filter out duplicate center names
+                const uniqueSuggestions = Array.from(new Set(data));
+
+                suggestions.innerHTML = '';
+                if (uniqueSuggestions.length > 0) {
+                    uniqueSuggestions.forEach(suggestion => {
+                        const item = document.createElement('a');
+                        item.classList.add('dropdown-item');
+                        item.href = '#';
+                        item.textContent = suggestion;
+                        item.addEventListener('click', () => {
+                            centerNameInput.value = suggestion;
+                            suggestions.style.display = 'none';
+                        });
+                        suggestions.appendChild(item);
+                    });
+                    suggestions.style.display = 'block';
+                } else {
+                    suggestions.style.display = 'none';
+                }
+            })
+            .catch(error => console.error('Error fetching suggestions:', error));
+    });
+
+    // Fetch center data from the backend
+    /*fetch('/api/centers')
+        .then(response => response.json())
+        .then(data => {
+            const centers = {};
+
+            // Group center data by center name
+            data.forEach(center => {
+                if (!centers[center.center_name]) {
+                    centers[center.center_name] = {
+                        center_name: center.center_name,
+                        city: center.city,
+                        school_code: [center.school_code]
+                    };
+                } else {
+                    centers[center.center_name].school_code.push(center.school_code);
+                }
+            });
+
+            // Populate the table
+            Object.values(centers).forEach(center => {
+                const row = `
+                    <tr>
+                        <td>${center.center_name}</td>
+                        <td>${center.city}</td>
+                        <td>${center.school_code.join(', ')}</td>
+                    </tr>
+                `;
+                centerTableBody.insertAdjacentHTML('beforeend', row);
+            });
+        })
+        .catch(error => console.error('Error fetching center data:', error));*/
+        fetch('/api/centers')
+    .then(response => response.json())
+    .then(data => {
+        //console.log("Data:",data);
+        const centers = {};
+
+        // Group center data by center name
+        data.forEach(item => {
+            const { center_name, school_code, city } = item;
+            if (!centers[center_name]) {
+                centers[center_name] = {
+                    center_name: center_name,
+                    city: city,
+                    school_codes: [school_code] // Store school codes in an array
+                };
+            } else {
+                centers[center_name].school_codes.push(school_code); // Add school code to existing center
+            }
+        });
+        // Populate the table
+        Object.values(centers).forEach(center => {
+            const row = `
+                <tr>
+                    <td>${center.center_name}</td>
+                    <!--<td>${center.city}</td>-->
+                    <td>${center.school_codes.join(', ')}</td>
+                </tr>
+            `;
+            centerTableBody.insertAdjacentHTML('beforeend', row);
+        });
+    })
+    .catch(error => console.error('Error fetching center data:', error));
+
+        
+});
+    </script>
+
+</body>
+
+</html>

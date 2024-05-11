@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Details</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+    <style>
+        .table-container {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        th,
+        td {
+            border: 1px solid #dddddd;
+            text-align: left;
+            padding: 8px;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+
+<body>
+     <nav class="navbar navbar-expand-lg navbar-light bg-dark ">
+        <div class="container-fluid">
+          <a class="navbar-brand text-white" href="#">AIML</a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+              <li class="nav-item">
+                <a class="nav-link active text-white" aria-current="page" href="#"><i
+                    class="fa fa-dashboard"></i>Dashboard</a>
+              </li>
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle text-white" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i
+                    class="fa fa-school"></i> School
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                  <li><a class="dropdown-item" href="/school">Add School</a></li>
+                  <li><a class="dropdown-item" href="/viewsc">View Student</a></li>
+                  
+                </ul>
+              </li>
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle text-white" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i
+                    class="fa fa-user-plus"></i>Student
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                  <li><a class="dropdown-item" href="/register">Add Student</a></li>
+                  <li><a class="dropdown-item" href="/viewst">View Student</a></li>
+                  
+                </ul>
+              </li>
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle text-white" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i
+                    class="fa fa-home"></i> Exam Center
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                  <li><a class="dropdown-item" href="/center">Add Center</a></li>
+                  <li><a class="dropdown-item" href="/viewct">View Center</a></li>
+                 
+                </ul>
+              </li>
+            </ul>
+           
+          </div>
+        </div>
+      </nav>
+
+    <div class="container mt-5">
+
+        <h3>{{schoolName}}</h3>
+
+        <div class="table-container">
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th scope="col">Student ID</th>
+                            <th scope="col">Name</th>
+                            <th scope="col">Class</th>
+                            <th scope="col">Guardian Name</th>
+                            <th scope="col">Contact Number</th>
+                            <th scope="col">Medium</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {{#each students}}
+                        <tr>
+                            <td>{{this.studentID}}</td>
+                            <td>{{this.name}}</td>
+                            <td>{{this.Class}}</td>
+                            <td>{{this.gurdianname}}</td>
+                            <td>{{this.contactno}}</td>
+                            <td>{{this.mediumCode}}</td>
+                        </tr>
+                        {{/each}}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>
